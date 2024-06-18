@@ -22,6 +22,9 @@ app.get('/api/users', (req, res) => {
     ];
     res.json(users);
 });
+app.get('/api/new/data',(req,res)=>{
+    res.json({"message":"working"});
+})
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
