@@ -1,15 +1,21 @@
 pipeline {
     agent any
 
+    environment {
+        GIT_REPO = 'https://github.com/akash4ocpl/ci-cd.git'
+        BRANCH = 'main'
+        WEBHOOK_SECRET = credentials('github-webhook-secret') // This uses the secret stored in Jenkins credentials
+    }
+
     stages {
         stage('Build') {
             steps {
                 script {
-                    // Pull the latest code from the repository
-                    git 'https://your-repo-url.git'
+                    // Pull the latest code from the repository using GitHub credentials
+                    git branch: "${BRANCH}", url: "${GIT_REPO}", credentialsId: 'github-credentials'
                 }
                 // Build the Docker image
-                sh 'docker build -t your-dockerhub-username/node-app .'
+                sh 'docker build -t akash4ocpl/node-app .'
             }
         }
 
@@ -23,12 +29,12 @@ pipeline {
         stage('Push') {
             steps {
                 script {
-                    // Login to DockerHub
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
-                        sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                    // Login to DockerHub using credentials
+                    withCredentials([usernamePassword(credentialsId: '1234567890987654321', passwordVariable: 'OcplTech666@', usernameVariable: 'akash4ocpl')]) {
+                        sh 'echo OcplTech666@ | docker login -u akash4ocpl --password-stdin'
                     }
                     // Push the Docker image to DockerHub
-                    sh 'docker push your-dockerhub-username/node-app'
+                    sh 'docker push akash4ocpl/node-app'
                 }
             }
         }
@@ -37,7 +43,7 @@ pipeline {
             steps {
                 script {
                     // Deploy the Docker container
-                    sh 'docker run -d -p 3000:3000 your-dockerhub-username/node-app'
+                    sh 'docker run -d -p 5000:5000 akash4ocpl/node-app'
                 }
             }
         }
